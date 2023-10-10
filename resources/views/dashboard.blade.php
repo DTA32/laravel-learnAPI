@@ -18,6 +18,19 @@
                     <p>Email: {{Auth::user()->email}}</p>
                     <p>Google ID: {{Auth::user()->google_id}}</p>
                 </div>
+                <div class="overflow-y-scroll divide-y divide-solid">
+                    @foreach ($orders as $order)
+                    <div class="grid grid-cols-2">
+                        <div>
+                            <p>ID: {{$order->id}}</p>
+                            <p>Amount: {{$order->amount}}</p>
+                        </div>
+                        <div class="w-1/3 h-1/3 justify-self-end">
+                            <a href={{route('order_detail', $order->id)}} class="rounded bg-gray-300 hover:bg-gray-400 text-center">Detail</a>
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
                 <a href="{{route('auth_logout')}}" class="text-center border rounded bg-orange-400 hover:bg-orange-500 w-1/2 py-1 px-3">Logout</a>
             </div>
         </div>
