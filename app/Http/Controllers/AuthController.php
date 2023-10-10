@@ -17,7 +17,7 @@ class AuthController extends Controller
             'password'=> 'required|min:6'
         ]);
 
-        if(User::where('email', $request->email)->value('type') == 2){
+        if(User::where('email', $request->email)->value('google_id') != null){
             $request->session()->put('error', 'Please login using google!');
             return redirect()->back();
         }
@@ -51,7 +51,6 @@ class AuthController extends Controller
             'name'=> $request->name,
             'email'=> $request->email,
             'password'=> bcrypt($request->password),
-            'type' => 1,
         ]);
 
         Auth::login($user);
@@ -75,7 +74,6 @@ class AuthController extends Controller
             'name' => $googleUser->getName(),
             'email' => $googleUser->getEmail(),
             'password' => '',
-            'type' => 2,
         ]);
         Auth::login($user);
         return redirect('/dashboard');
