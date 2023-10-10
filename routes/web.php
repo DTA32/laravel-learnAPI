@@ -31,7 +31,7 @@ Route::get("/dashboard", function(){
 })->name('dashboard')->middleware('auth');
 
 Route::post("/auth/register", [AuthController::class, 'register'])->name('auth_register');
-
 Route::post("/auth/login", [AuthController::class, 'login'])->name('auth_login');
-
 Route::get("/auth/logout", [AuthController::class, 'logout'])->name('auth_logout');
+Route::get("/auth/google", [AuthController::class, 'google'])->name("auth_google");
+Route::get("/auth/google/callback", [AuthController::class, 'googleCallback'])->name("auth_google_callback");

@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Auth;
+use Laravel\Socialite\Facades\Socialite;
+use Illuminate\Support\Str;
+use Session;
 
 class AuthController extends Controller
 {
@@ -13,6 +16,11 @@ class AuthController extends Controller
             'email'=> 'required|email',
             'password'=> 'required|min:6'
         ]);
+
+        if(User::where('email', $request->email)->value('type') == 2){
+            $request->session()->put('error', 'Please login using google!');
+            return redirect()->back();
+        }
 
         if(Auth::attempt($request->only('email', 'password'))){
             return redirect()->route('dashboard');
@@ -25,13 +33,18 @@ class AuthController extends Controller
     public function register(Request $request){
         $request->validate([
             'name' => 'required',
-            'email' => 'required|email|unique:users,email',
+            'email' => 'required|email',
             'password'=> 'required|min:6'
         ]);
 
         if($request->password !== $request->confirm_password){
             $request->session()->put('error', 'password not match!');
             return redirect()->back();
+        }
+
+        if(User::where('email', $request->email)->exists()){
+            $request->session()->put('error', 'Email already exists! Please login.');
+            return redirect()->route('login');
         }
 
         $user = User::create([
@@ -48,5 +61,23 @@ class AuthController extends Controller
     public function logout(){
         Auth::logout();
         return redirect()->route('login');
+    }
+
+    public function google(){
+        return Socialite::driver('google')->redirect();
+    }
+
+    public function googleCallback(){
+        $googleUser = Socialite::driver('google')->user();
+        $user = User::updateOrCreate([
+            'google_id' => $googleUser->getId(),
+        ], [
+            'name' => $googleUser->getName(),
+            'email' => $googleUser->getEmail(),
+            'password' => '',
+            'type' => 2,
+        ]);
+        Auth::login($user);
+        return redirect('/dashboard');
     }
 }

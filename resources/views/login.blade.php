@@ -26,14 +26,14 @@
                     </div>
                     <div class="flex flex-col gap-2 items-center text">
                         <button class="border rounded bg-orange-400 hover:bg-orange-500 w-1/2 py-1 px-3">Login</button>
-                        <button class="border rounded bg-gray-200 hover:bg-gray-300 w-1/2 py-1 px-3">Login with Google</button>
+                        <a href="{{route('auth_google')}}" class="border rounded bg-gray-200 hover:bg-gray-300 w-1/2 py-1 px-3">Login with Google</a>
                     </div>
                 </form>
                 <div class="flex flex-row justify-center">
                     <p>Doesn't have account yet?</p>
                     <a href={{route('register')}} class="text-blue-500">Register</a>
                 </div>
-                <p class="text-center text-red-500">{{Session::pull('error')}}</p>
+                <p class="text-center text-red-300">{{Session::pull('error')}}</p>
             </div>
         </div>
     </body>

@@ -40,7 +40,7 @@
                         <button class="border rounded bg-orange-400 hover:bg-orange-500 w-1/2 py-1 px-3">Register</button>
                     </div>
                 </form>
-                <p class="text-center text-red">{{Session::pull('error')}}</p>
+                <p class="text-center text-red-300">{{Session::pull('error')}}</p>
             </div>
         </div>
     </body>
